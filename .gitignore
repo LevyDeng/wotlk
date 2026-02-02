@@ -35,3 +35,5 @@ tmp/
 wowsimwotlk*.so
 wowsimwotlk*.dll
 wowsimwotlk*.h
+
+*.log

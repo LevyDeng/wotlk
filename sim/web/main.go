@@ -289,6 +289,8 @@ func (s *server) runServer(useFS bool, host string, launchBrowser bool, simName 
 			http.Redirect(resp, req, "/wotlk/", http.StatusPermanentRedirect)
 			return
 		}
+		// Log requests for debugging (e.g. 404 in Docker)
+		log.Printf("HTTP %s %s", req.Method, req.URL.Path)
 		resp.Header().Add("Cache-Control", "no-cache")
 		if strings.HasSuffix(req.URL.Path, ".wasm") {
 			resp.Header().Set("Content-Type", "application/wasm")

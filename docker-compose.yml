@@ -1,0 +1,29 @@
+services:
+  wowsims-wotlk:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - HTTP_PROXY=${HTTP_PROXY:-}
+        - HTTPS_PROXY=${HTTPS_PROXY:-}
+        - http_proxy=${http_proxy:-}
+        - https_proxy=${https_proxy:-}
+        - NO_PROXY=${NO_PROXY:-}
+        - no_proxy=${no_proxy:-}
+    container_name: wowsims-wotlk
+    ports:
+      - "3333:3333"
+    volumes:
+      # Mount source so container uses your code; server is built and run on start
+      - .:/wotlk
+    environment:
+      - WATCH=0
+    # Build frontend (dist/wotlk) and server binary, then run server on :3333
+    command: ["sh", "-c", "npm install && make binary_dist && make devserver && exec ./wowsimwotlk --usefs=true --launch=false --host=:3333"]
+    restart: unless-stopped
+    networks:
+      - wowsims-network
+
+networks:
+  wowsims-network:
+    driver: bridge
