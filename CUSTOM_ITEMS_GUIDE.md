@@ -12,6 +12,19 @@
 - **宝石覆盖**: `tools/database/overrides.go` - `GemOverrides` 变量
 - **附魔覆盖**: `tools/database/enchant_overrides.go` - `EnchantOverrides` 变量
 
+## 修改已有装备
+
+可以像添加新装备一样，在 `ItemOverrides` 里用**相同 ID** 覆盖已有装备的属性。生成数据库时，会先加载主库，再合并覆盖；若覆盖项带了 `Stats`，会**整体替换**该装备的 `Stats` 数组。
+
+**示例：把 Darkmoon Card: Berserker!（ID 42989）的攻强从 100 改为 200**
+
+```go
+// Darkmoon Card: Berserker! - override AP to 200 (default 100)
+{Id: 42989, Stats: stats.Stats{stats.AttackPower: 200, stats.RangedAttackPower: 200, stats.Resilience: 100}.ToFloatArray()},
+```
+
+注意：覆盖时若提供了 `Stats`，会替换整条属性，所以需要把要保留的属性（如韧性 100）一起写上。
+
 ## 添加自定义物品
 
 ### 最小必需字段
@@ -254,7 +267,8 @@ var EnchantOverrides = []*proto.UIEnchant{
    ```
    或
    ```bash
-   go run tools/database/gen_db/*.go -outDir=./assets -gen=db
+   go run ./tools/database/gen_db -outDir=./assets -gen=db
+   # Windows PowerShell: 同上。Linux/macOS 也可用: go run tools/database/gen_db/*.go ...
    ```
 
 4. **测试导入**：

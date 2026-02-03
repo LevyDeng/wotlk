@@ -48,6 +48,9 @@ RUN . "$NVM_DIR/nvm.sh" && nvm use v${NODE_VERSION}
 RUN . "$NVM_DIR/nvm.sh" && nvm alias default v${NODE_VERSION}
 ENV PATH="/usr/local/bin:/root/.nvm/versions/node/v${NODE_VERSION}/bin:${PATH}"
 
-# Install deps, build frontend (dist/wotlk) and server, then run on :3333
+# Build everything at image build time (not container startup)
+RUN npm install && make binary_dist && make devserver
+
+# Run server on :3333
 EXPOSE 3333/tcp
-CMD ["sh", "-c", "npm install && make binary_dist && make devserver && exec ./wowsimwotlk --usefs=true --launch=false --host=:3333"]
+CMD ["./wowsimwotlk", "--usefs=true", "--launch=false", "--host=:3333"]

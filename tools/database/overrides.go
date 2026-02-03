@@ -167,6 +167,9 @@ var ItemOverrides = []*proto.UIItem{
 
 	// Heirloom Dwarven Handcannon, Wowhead partially glitchs out and shows us some other lvl calc for this
 	{Id: 44093, Stats: stats.Stats{stats.MeleeCrit: 30, stats.SpellCrit: 30, stats.Resilience: 13, stats.AttackPower: 34}.ToFloatArray()},
+
+	// Darkmoon Card: Berserker! - override AP to 200 (default 100)
+	{Id: 42989, Stats: stats.Stats{stats.AttackPower: 200, stats.RangedAttackPower: 200, stats.Resilience: 100}.ToFloatArray()},
 }
 
 // Keep these sorted by item ID.

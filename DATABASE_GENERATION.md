@@ -39,8 +39,14 @@ make items
 
 ### 方法二：直接运行 Go 程序
 
+**Linux/macOS**（shell 会展开 `*`）:
 ```bash
 go run tools/database/gen_db/*.go -outDir=./assets -gen=db
+```
+
+**Windows (PowerShell)**（不要用 `*`，用包路径）:
+```powershell
+go run ./tools/database/gen_db -outDir=./assets -gen=db
 ```
 
 ## 完整的数据抓取流程

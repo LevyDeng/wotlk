@@ -95,18 +95,107 @@ chmod +x docker.sh
 启动成功后，模拟器将在以下地址可用：
 - http://localhost:3333
 
-## 开发模式
+## 开发模式（快速测试）
 
-如果你需要在开发模式下运行（代码变更自动生效），可以修改 `docker-compose.yml`：
+### 使用开发配置启动
 
-```yaml
-volumes:
-  - .:/wotlk  # 挂载源代码目录
-environment:
-  - WATCH=1   # 启用文件监听
+开发模式使用 `docker-compose.dev.yml` 配置，挂载源代码目录，支持快速测试：
+
+```powershell
+# Windows
+docker-compose -f docker-compose.dev.yml up -d
+
+# Linux/macOS
+docker-compose -f docker-compose.dev.yml up -d
 ```
 
-然后使用 `frestart` 命令重新启动。
+### 快速测试命令
+
+修改代码后，使用快速测试脚本：
+
+**Windows (PowerShell)**:
+```powershell
+# 只重新生成装备数据库（最快，~10秒）
+.\quick-test.ps1 items
+.\quick-test.ps1 restart
+
+# 只重新编译服务器（修改了 Go 代码）
+.\quick-test.ps1 server
+
+# 只重新编译 UI（修改了 TypeScript 代码）
+.\quick-test.ps1 ui
+
+# 完整重新构建（items + server + UI）
+.\quick-test.ps1 full
+
+# 只重启服务器（不重新构建）
+.\quick-test.ps1 restart
+```
+
+**Linux/macOS (Bash)**:
+```bash
+chmod +x quick-test.sh
+
+# 同样的命令
+./quick-test.sh items
+./quick-test.sh restart
+./quick-test.sh server
+./quick-test.sh ui
+./quick-test.sh full
+```
+
+### 典型开发工作流
+
+**修改装备属性**：
+```powershell
+# 1. 编辑 tools/database/overrides.go
+# 2. 重新生成数据库
+.\quick-test.ps1 items
+
+# 3. 重启服务器加载新数据库
+.\quick-test.ps1 restart
+```
+
+**修改模拟器逻辑（Go 代码）**：
+```powershell
+# 1. 编辑 sim/{class}/*.go
+# 2. 重新编译服务器
+.\quick-test.ps1 server
+```
+
+**修改 UI（TypeScript 代码）**：
+```powershell
+# 1. 编辑 ui/**/*.ts
+# 2. 重新编译 UI
+.\quick-test.ps1 ui
+```
+
+### 为什么快？
+
+1. **分层缓存**：
+   - Go/npm 依赖只在首次构建时安装
+   - 只重新编译变更的代码
+
+2. **Volume 挂载**：
+   - 源代码通过 volume 挂载，无需复制到容器
+   - 修改立即同步到容器内
+
+3. **增量编译**：
+   - `make` 只重新编译变更的文件
+   - Go 和 TypeScript 都支持增量编译
+
+4. **本地生成数据库**：
+   - 数据库生成在本地运行（不在 Docker 内）
+   - 生成后通过 volume 自动同步到容器
+
+### 性能对比
+
+| 操作 | 生产模式 | 开发模式 |
+|------|----------|----------|
+| 首次构建 | ~10分钟 | ~10分钟 |
+| 修改装备重新生成 | ~5分钟 | ~10秒 |
+| 修改 Go 代码重新编译 | ~5分钟 | ~30秒 |
+| 修改 UI 代码重新编译 | ~5分钟 | ~1分钟 |
 
 ## 故障排除
 
@@ -156,6 +245,8 @@ docker compose logs -f wowsims-wotlk
 
 ### 404：访问 /wotlk/xxx 仍 404 时排查
 
+**原因说明**：`docker.ps1` 使用 `docker-compose.yml`，启动时会执行 `npm install && make binary_dist && make devserver`，会先构建前端到 `dist/wotlk` 再启动服务；`docker-compose.dev.yml` 也必须包含 `make binary_dist`（以及前面的 `npm install`），否则 `--usefs=true` 时服务从 `./dist` 读文件，`dist` 未构建就会 404。两者启动命令需一致。
+
 1. **进容器看 dist 是否存在：**
    ```powershell
    docker exec -it wowsims-wotlk sh
@@ -174,7 +265,7 @@ docker compose logs -f wowsims-wotlk
    ```
    若返回 HTML 则服务正常，问题在浏览器或端口映射；若 404 则服务端没找到文件。
 
-3. **确认启动命令在项目根执行：**  
+3. **确认启动命令在项目根执行：**
    服务器用 `./dist` 做静态目录，工作目录必须是项目根（即存在 `dist` 的目录）。当前 `docker-compose` 的 `command` 已在 `/wotlk` 下执行，一般无需改。
 
 ### 容器无法启动
