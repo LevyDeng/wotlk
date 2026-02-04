@@ -1,0 +1,54 @@
+# Development Dockerfile with faster rebuild
+# Uses caching and volume mounting for quick iterations
+
+FROM golang:1.23-alpine
+
+# Proxy for apk/go/npm (pass via build: HTTP_PROXY=http://host:port)
+ARG HTTP_PROXY
+ARG HTTPS_PROXY
+ARG http_proxy
+ARG https_proxy
+ENV HTTP_PROXY=${HTTP_PROXY}
+ENV HTTPS_PROXY=${HTTPS_PROXY}
+ENV http_proxy=${http_proxy}
+ENV https_proxy=${https_proxy}
+
+# Install all build dependencies (cached layer)
+RUN apk add --no-cache \
+    protobuf-dev \
+    make \
+    git \
+    nodejs \
+    npm
+
+WORKDIR /wotlk
+
+# Copy dependency files first (cached if unchanged)
+COPY go.mod go.sum package.json package-lock.json ./
+
+# Install Go dependencies (cached layer)
+RUN go mod download
+
+# protoc-gen-go required for protoc --go_out (main Dockerfile gets it from rvolosatovs/protoc)
+RUN go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
+ENV PATH="/go/bin:${PATH}"
+
+# Install npm dependencies (cached layer) — use npm install like main Dockerfile for compatibility
+RUN npm install
+
+# Copy makefile and proto, then generate code (same as main Dockerfile via make)
+COPY makefile ./
+COPY proto ./proto
+RUN mkdir -p sim/core ui/core/proto && make proto
+
+# Copy source code (this layer rebuilds when code changes)
+COPY . .
+
+# Build (can be overridden with volume mount in dev mode)
+RUN make proto || true
+RUN make devserver || echo "Build will happen at runtime"
+
+EXPOSE 3333
+
+# Default command (can be overridden)
+CMD ["./wowsimwotlk", "--usefs=true", "--host=:3333", "--launch=false"]

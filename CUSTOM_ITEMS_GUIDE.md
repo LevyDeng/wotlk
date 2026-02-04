@@ -89,6 +89,17 @@ var ItemOverrides = []*proto.UIItem{
 }
 ```
 
+**重要**：若装备仅来自自定义（不在 Wowhead/gearplanner 等主数据源中），需把该装备的 **Id** 加入同文件中的 **`ItemAllowList`**，否则可能被过滤掉。例如：`257631: {}, // 北境战盔 (custom override)`。
+
+修改装备或 `ItemOverrides` 后：
+
+1. **`.\quick-test.ps1 items`** — 生成新 `assets/database/db.bin` 和 `db.json`。
+2. **`.\quick-test.ps1 ui`** — 在容器内重新执行 `make binary_dist`，把新的 `db.json` 拷进 dist，这样**页面**用的 DB（导入/装备选择器）才会更新；否则会出现 “IDs were not found in the sim database”。
+3. **`.\quick-test.ps1 server`**（或 **`.\quick-test.ps1 restart`**）— 重新编译并嵌入新 DB，**服务端**跑模拟时才能解析装备。
+4. 浏览器**强制刷新**（Ctrl+F5）后再导入。
+
+若导入时提示 **Enchants: xxx not found**，说明这些附魔不在库里，需要在 `tools/database/enchant_overrides.go` 的 **EnchantOverrides** 里按 ID 添加或覆盖。
+
 ### 物品类型 (ItemType)
 
 常用类型：

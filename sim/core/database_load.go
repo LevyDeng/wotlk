@@ -5,6 +5,8 @@
 package core
 
 import (
+	"log"
+
 	"github.com/wowsims/wotlk/assets/database"
 	"github.com/wowsims/wotlk/sim/core/proto"
 )
@@ -12,6 +14,7 @@ import (
 func init() {
 	db := database.Load()
 	WITH_DB = true
+	log.Printf("Database loaded: %d items, %d enchants, %d gems", len(db.Items), len(db.Enchants), len(db.Gems))
 
 	simDB := &proto.SimDatabase{
 		Items:    make([]*proto.SimItem, len(db.Items)),

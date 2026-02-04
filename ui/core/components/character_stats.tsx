@@ -309,6 +309,15 @@ export class CharacterStats extends Component {
 		return debuffStats;
 	}
 
+	private getTotalForStat(stat: Stat): number {
+		const playerStats = this.player.getCurrentStats();
+		if (!playerStats.finalStats) return 0;
+		const statMods = this.modifyDisplayStats ? this.modifyDisplayStats(this.player) : { talents: new Stats() };
+		const debuffStats = this.getDebuffStats();
+		const finalStats = Stats.fromProto(playerStats.finalStats).add(statMods.talents).add(debuffStats);
+		return finalStats.getStat(stat);
+	}
+
 	private bonusStatsLink(stat: Stat): HTMLElement {
 		let statName = getClassStatName(stat, this.player.getClass());
 
@@ -337,13 +346,46 @@ export class CharacterStats extends Component {
 			},
 		});
 
+		const setToRow = document.createElement('div');
+		setToRow.classList.add('mb-2');
+		const setToLabel = document.createElement('label');
+		setToLabel.classList.add('form-label');
+		setToLabel.textContent = `Set total to:`;
+		setToRow.appendChild(setToLabel);
+		const setToInput = document.createElement('input');
+		setToInput.type = 'number';
+		setToInput.classList.add('form-control', 'number-picker-input');
+		setToInput.placeholder = String(this.getTotalForStat(stat));
+		setToRow.appendChild(setToInput);
+		setToInput.addEventListener('change', () => {
+			const desired = parseFloat(setToInput.value);
+			if (isNaN(desired)) return;
+			const currentTotal = this.getTotalForStat(stat);
+			const currentBonus = this.player.getBonusStats().getStat(stat);
+			const newBonus = Math.round(desired - currentTotal + currentBonus);
+			const bonusStats = this.player.getBonusStats().withStat(stat, newBonus);
+			this.player.setBonusStats(TypedEvent.nextEventID(), bonusStats);
+			setToInput.value = '';
+			setToInput.placeholder = String(this.getTotalForStat(stat));
+			popover?.hide();
+		});
+
+		const popoverContent = document.createElement('div');
+		popoverContent.appendChild(picker.rootElem);
+		popoverContent.appendChild(setToRow);
+
 		popover = new Popover(link, {
 			customClass: 'bonus-stats-popover',
 			placement: 'right',
 			fallbackPlacement: ['left'],
 			sanitize: false,
-			html:true,
-			content: picker.rootElem,
+			html: true,
+			content: popoverContent,
+		});
+
+		link.addEventListener('shown.bs.popover', () => {
+			setToInput.placeholder = String(Math.round(this.getTotalForStat(stat)));
+			setToInput.value = '';
 		});
 
 		return link as HTMLElement;

@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  wowsims-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+      args:
+        - HTTP_PROXY=${HTTP_PROXY:-}
+        - HTTPS_PROXY=${HTTPS_PROXY:-}
+        - http_proxy=${http_proxy:-}
+        - https_proxy=${https_proxy:-}
+    container_name: wowsims-wotlk-dev
+    ports:
+      - "3333:3333"
+    volumes:
+      # Mount source code for live editing
+      - ./sim:/wotlk/sim
+      - ./tools:/wotlk/tools
+      - ./assets:/wotlk/assets
+      - ./ui:/wotlk/ui
+      - ./proto:/wotlk/proto
+      - ./makefile:/wotlk/makefile
+      # Persist built frontend so we only rebuild when missing (fast restart)
+      - dist_dev:/wotlk/dist
+      # Preserve node_modules and go cache
+      - node_modules:/wotlk/node_modules
+      - go_cache:/go/pkg
+    environment:
+      - WATCH=0
+    working_dir: /wotlk
+    # Build frontend only when dist is empty; then build server and run (fast after first run)
+    command: sh -c "if [ ! -f dist/wotlk/mage/index.html ]; then npm install && make binary_dist; fi && make devserver && exec ./wowsimwotlk --usefs=true --host=:3333 --launch=false"
+    restart: unless-stopped
+    networks:
+      - wowsims-network
+
+volumes:
+  node_modules:
+  go_cache:
+  dist_dev:
+
+networks:
+  wowsims-network:
+    driver: bridge
