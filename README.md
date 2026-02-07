@@ -62,9 +62,9 @@ docker本身应该也需要设置代理
    ```powershell
    .\quick-test.ps1 stop    # 停止容器，避免冲突
    .\quick-test.ps1 items  # 重新生成装备数据
+   .\quick-test.ps1 start  # 启动容器
    .\quick-test.ps1 ui     # 更新前端
    .\quick-test.ps1 server # 重新编译服务端
-   .\quick-test.ps1 start  # 启动容器
    ```
 
 3. 浏览器打开 **http://localhost:3333**，使用字符串导入即可看到新增装备。

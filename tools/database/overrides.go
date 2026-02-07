@@ -234,10 +234,8 @@ var ItemOverrides = []*proto.UIItem{
 		Stats: stats.Stats{
 			stats.Strength:    85,
 			stats.Stamina:     98,
-			stats.Agility:     21,
-			stats.AttackPower: 50,
 			stats.MeleeHit:    86,
-			stats.MeleeCrit:   52, // 20 + 32 from equip lines
+			stats.MeleeCrit:   32, // 20 + 32 from equip lines
 			stats.Armor:       1867,
 		}.ToFloatArray(),
 		GemSockets: []proto.GemColor{

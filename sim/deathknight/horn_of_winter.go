@@ -9,6 +9,8 @@ import (
 func (dk *Deathknight) registerHornOfWinterSpell() {
 	actionID := core.ActionID{SpellID: 57623}
 	rpMetrics := dk.NewRunicPowerMetrics(actionID)
+	// Cache set bonus at register time; must not call HasSetBonus after finalization.
+	bonusRP := dk.northrendSetHornOfWinterRunicPowerBonus()
 
 	dk.HornOfWinter = dk.RegisterSpell(core.SpellConfig{
 		ActionID: actionID,
@@ -24,7 +26,7 @@ func (dk *Deathknight) registerHornOfWinterSpell() {
 			IgnoreHaste: true,
 		},
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			dk.AddRunicPower(sim, 10+dk.northrendSetHornOfWinterRunicPowerBonus(), rpMetrics)
+			dk.AddRunicPower(sim, 10+bonusRP, rpMetrics)
 		},
 	})
 }
