@@ -235,6 +235,7 @@ var ItemOverrides = []*proto.UIItem{
 			stats.Strength:  85,
 			stats.Stamina:   98,
 			stats.MeleeHit:  86,
+			stats.SpellHit:  86, // WotLK hit rating is unified (melee + spell)
 			stats.MeleeCrit: 32, // 20 + 32 from equip lines
 			stats.Armor:     1867,
 		}.ToFloatArray(),
@@ -400,6 +401,7 @@ var ItemOverrides = []*proto.UIItem{
 			stats.AttackPower:       113,
 			stats.RangedAttackPower: 113,
 			stats.MeleeHit:          35,
+			stats.SpellHit:          35, // WotLK hit rating is unified
 			stats.FireResistance:    35,
 		}.ToFloatArray(),
 		GemSockets: []proto.GemColor{proto.GemColor_GemColorRed},
@@ -421,7 +423,7 @@ var ItemOverrides = []*proto.UIItem{
 			stats.MeleeHaste:        36,
 		}.ToFloatArray(),
 		GemSockets:  []proto.GemColor{proto.GemColor_GemColorBlue},
-		SocketBonus: stats.Stats{stats.MeleeHit: 4}.ToFloatArray(),
+		SocketBonus: stats.Stats{stats.MeleeHit: 4, stats.SpellHit: 4}.ToFloatArray(),
 	},
 }
 

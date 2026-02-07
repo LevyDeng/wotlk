@@ -27,28 +27,29 @@ docker本身应该也需要设置代理
    - 在 **`ItemOverrides`** 中追加新装备，例如：
 
    ```go
-   // 北境肩甲 (custom, DK plate shoulder)
    {
-       Id:             257629,
-       Name:           "北境肩甲",
-       Type:           proto.ItemType_ItemTypeShoulder,
-       ArmorType:      proto.ArmorType_ArmorTypePlate,
-       Ilvl:           213,
-       Quality:        proto.ItemQuality_ItemQualityEpic,
-       SetName:        "北境",
-       ClassAllowlist: []proto.Class{proto.Class_ClassDeathknight},
-       Stats: stats.Stats{
-           stats.Strength:  75,
-           stats.Stamina:  85,
-           stats.MeleeCrit: 43,
-           stats.Expertise: 49,
-           stats.Armor:    1723,
-       }.ToFloatArray(),
-       GemSockets: []proto.GemColor{
-           proto.GemColor_GemColorYellow,
-       },
-       SocketBonus: stats.Stats{stats.Strength: 4}.ToFloatArray(),
-   },
+		Id:             257631,
+		Name:           "北境战盔",
+		Type:           proto.ItemType_ItemTypeHead,
+		ArmorType:      proto.ArmorType_ArmorTypePlate,
+		Ilvl:           213,
+		Quality:        proto.ItemQuality_ItemQualityEpic,
+		SetName:        "北境",
+		ClassAllowlist: []proto.Class{proto.Class_ClassDeathknight},
+		Stats: stats.Stats{
+			stats.Strength:  85,
+			stats.Stamina:   98,
+			stats.MeleeHit:  86,
+			stats.SpellHit:  86, // WotLK hit rating is unified (melee + spell)
+			stats.MeleeCrit: 32, // 20 + 32 from equip lines
+			stats.Armor:     1867,
+		}.ToFloatArray(),
+		GemSockets: []proto.GemColor{
+			proto.GemColor_GemColorMeta,   // 多彩插槽
+			proto.GemColor_GemColorYellow, // 黄槽
+		},
+		SocketBonus: stats.Stats{stats.Strength: 8}.ToFloatArray(),
+	},,
    ```
 
    - 在 **`ItemAllowList`** 中增加该装备的 ID：
@@ -56,6 +57,7 @@ docker本身应该也需要设置代理
    ```go
    257629: {}, // 北境肩甲 (custom override)
    ```
+   注意, 如果这件装备原来就存在只是覆盖升级一下(比如tbc的装备), 不要添加宝石插槽.
 
 2. **重新生成数据并启动**
 
