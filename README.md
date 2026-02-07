@@ -27,7 +27,8 @@ docker本身应该也需要设置代理
    - 在 **`ItemOverrides`** 中追加新装备，例如：
 
    ```go
-   {
+   // 北境战盔 (custom, replace Id with real item ID when known)
+	{
 		Id:             257631,
 		Name:           "北境战盔",
 		Type:           proto.ItemType_ItemTypeHead,
@@ -41,7 +42,8 @@ docker本身应该也需要设置代理
 			stats.Stamina:   98,
 			stats.MeleeHit:  86,
 			stats.SpellHit:  86, // WotLK hit rating is unified (melee + spell)
-			stats.MeleeCrit: 32, // 20 + 32 from equip lines
+			stats.MeleeCrit: 32,
+			stats.SpellCrit: 32, // WotLK crit rating is unified
 			stats.Armor:     1867,
 		}.ToFloatArray(),
 		GemSockets: []proto.GemColor{
@@ -49,7 +51,7 @@ docker本身应该也需要设置代理
 			proto.GemColor_GemColorYellow, // 黄槽
 		},
 		SocketBonus: stats.Stats{stats.Strength: 8}.ToFloatArray(),
-	},,
+	}
    ```
 
    - 在 **`ItemAllowList`** 中增加该装备的 ID：
@@ -57,7 +59,32 @@ docker本身应该也需要设置代理
    ```go
    257629: {}, // 北境肩甲 (custom override)
    ```
-   注意, 如果这件装备原来就存在只是覆盖升级一下(比如tbc的装备), 不要添加宝石插槽.
+   注意, 如果这件装备原来就存在只是覆盖升级一下(比如tbc的装备), 不要添加宝石插槽. 比如:
+   ```go
+   // 血警卫的护胫 (custom, plate legs)
+	{
+		Id:        29950,
+		Name:      "血警卫的护胫",
+		Type:      proto.ItemType_ItemTypeLegs,
+		ArmorType: proto.ArmorType_ArmorTypePlate,
+		Ilvl:      219,
+		Quality:   proto.ItemQuality_ItemQualityEpic,
+		Stats: stats.Stats{
+			stats.Strength:         74,
+			stats.Stamina:          97,
+			stats.MeleeCrit:        92,
+			stats.SpellCrit:        92, // WotLK crit rating is unified
+			stats.ArmorPenetration: 61,
+			stats.Armor:            2032,
+		}.ToFloatArray(),
+		// GemSockets: []proto.GemColor{
+		// 	proto.GemColor_GemColorRed,
+		// 	proto.GemColor_GemColorYellow,
+		// 	proto.GemColor_GemColorBlue,
+		// },
+		SocketBonus: stats.Stats{stats.Strength: 8}.ToFloatArray(),
+	}
+	```
 
 2. **重新生成数据并启动**
 

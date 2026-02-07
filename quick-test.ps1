@@ -71,18 +71,70 @@ switch ($Target) {
     }
 
     "items" {
-        Write-Info "Regenerating items database..."
+        Write-Info "Full items workflow: stop -> regenerate DB -> start -> server -> UI"
 
-        # Run database generation locally (fast, no Docker rebuild)
-        go run ./tools/database/gen_db -outDir ./assets -gen db
-
-        if ($LASTEXITCODE -eq 0) {
-            Write-Info "Database regenerated successfully!"
-            Write-Info "Restart the server to load new database: .\quick-test.ps1 restart"
+        # Step 1: Stop container to avoid conflicts
+        if (Test-ContainerRunning) {
+            Write-Info "Step 1/5: Stopping container..."
+            docker stop $CONTAINER_NAME
+            if ($LASTEXITCODE -ne 0) {
+                Write-Error "Failed to stop container."
+                exit 1
+            }
         } else {
+            Write-Info "Step 1/5: Container not running, skip stop."
+        }
+
+        # Step 2: Regenerate items database locally
+        Write-Info "Step 2/5: Regenerating items database..."
+        go run ./tools/database/gen_db -outDir ./assets -gen db
+        if ($LASTEXITCODE -ne 0) {
             Write-Error "Database generation failed!"
             exit 1
         }
+
+        # Step 3: Start container
+        Write-Info "Step 3/5: Starting container..."
+        if ($env:HTTP_PROXY) {
+            Write-Info "Using proxy: $env:HTTP_PROXY"
+        }
+        docker-compose -f docker-compose.dev.yml up -d --build
+        if ($LASTEXITCODE -ne 0) {
+            Write-Error "Failed to start container."
+            exit 1
+        }
+
+        # Wait for container to be ready for docker exec
+        $maxWait = 30
+        $waited = 0
+        while (-not (Test-ContainerRunning) -and $waited -lt $maxWait) {
+            Start-Sleep -Seconds 2
+            $waited += 2
+        }
+        if (-not (Test-ContainerRunning)) {
+            Write-Error "Container did not become ready in time."
+            exit 1
+        }
+        Start-Sleep -Seconds 3
+
+        # Step 4: Rebuild server
+        Write-Info "Step 4/5: Rebuilding server..."
+        docker exec $CONTAINER_NAME sh -c "make devserver"
+        if ($LASTEXITCODE -ne 0) {
+            Write-Error "Server build failed!"
+            exit 1
+        }
+        docker restart $CONTAINER_NAME | Out-Null
+
+        # Step 5: Rebuild UI
+        Write-Info "Step 5/5: Rebuilding UI..."
+        docker exec $CONTAINER_NAME sh -c "make binary_dist"
+        if ($LASTEXITCODE -ne 0) {
+            Write-Error "UI build failed!"
+            exit 1
+        }
+
+        Write-Info "Items workflow complete! Server at http://localhost:3333"
     }
 
     "server" {
@@ -193,16 +245,14 @@ switch ($Target) {
         Write-Host "Commands:"
         Write-Host "  start   - Start dev container (docker-compose.dev.yml, build if needed)"
         Write-Host "  stop    - Stop dev container"
-        Write-Host "  items   - Regenerate items database only (fastest)"
+        Write-Host "  items   - Full workflow: stop -> regenerate DB -> start -> server -> UI"
         Write-Host "  server  - Rebuild server binary only"
         Write-Host "  ui      - Rebuild UI only"
         Write-Host "  full    - Rebuild everything (items + server + UI)"
         Write-Host "  restart - Restart server without rebuilding"
         Write-Host ""
-        Write-Host "Example workflow:"
-        Write-Host "  1. .\quick-test.ps1 start          # start Docker dev container"
-        Write-Host "  2. Modify tools/database/overrides.go"
-        Write-Host "  3. .\quick-test.ps1 items; .\quick-test.ps1 restart"
+        Write-Host "Example workflow (after adding/changing gear in overrides.go):"
+        Write-Host "  .\quick-test.ps1 items   # one command: stop, regen DB, start, rebuild server+UI"
         exit 1
     }
 }

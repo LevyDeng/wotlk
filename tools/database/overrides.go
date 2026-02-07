@@ -187,6 +187,7 @@ var ItemOverrides = []*proto.UIItem{
 			stats.AttackPower:       236, // 50 + 186
 			stats.RangedAttackPower: 236,
 			stats.MeleeCrit:         59, // 20 + 39
+			stats.SpellCrit:         59, // WotLK crit rating is unified
 			stats.MeleeHaste:        24,
 			stats.Armor:             1045,
 		}.ToFloatArray(),
@@ -212,6 +213,7 @@ var ItemOverrides = []*proto.UIItem{
 			stats.Strength:  75,
 			stats.Stamina:   85,
 			stats.MeleeCrit: 43,
+			stats.SpellCrit: 43, // WotLK crit rating is unified
 			stats.Expertise: 49,
 			stats.Armor:     1723,
 		}.ToFloatArray(),
@@ -236,7 +238,8 @@ var ItemOverrides = []*proto.UIItem{
 			stats.Stamina:   98,
 			stats.MeleeHit:  86,
 			stats.SpellHit:  86, // WotLK hit rating is unified (melee + spell)
-			stats.MeleeCrit: 32, // 20 + 32 from equip lines
+			stats.MeleeCrit: 32,
+			stats.SpellCrit: 32, // WotLK crit rating is unified
 			stats.Armor:     1867,
 		}.ToFloatArray(),
 		GemSockets: []proto.GemColor{
@@ -258,6 +261,7 @@ var ItemOverrides = []*proto.UIItem{
 			stats.Strength:   60,
 			stats.Stamina:    60,
 			stats.MeleeCrit:  60,
+			stats.SpellCrit:  60, // WotLK crit rating is unified
 			stats.MeleeHaste: 40,
 			stats.Armor:      155,
 		}.ToFloatArray(),
@@ -303,6 +307,7 @@ var ItemOverrides = []*proto.UIItem{
 			stats.AttackPower:       73,
 			stats.RangedAttackPower: 73,
 			stats.MeleeCrit:         28,
+			stats.SpellCrit:         28, // WotLK crit rating is unified
 			stats.ArmorPenetration:  19,
 		}.ToFloatArray(),
 	},
@@ -319,6 +324,7 @@ var ItemOverrides = []*proto.UIItem{
 			stats.Strength:         79,
 			stats.Stamina:          88,
 			stats.MeleeCrit:        52,
+			stats.SpellCrit:        52, // WotLK crit rating is unified
 			stats.ArmorPenetration: 40,
 			stats.Armor:            1436,
 		}.ToFloatArray(),
@@ -357,6 +363,7 @@ var ItemOverrides = []*proto.UIItem{
 			stats.Strength:         74,
 			stats.Stamina:          97,
 			stats.MeleeCrit:        92,
+			stats.SpellCrit:        92, // WotLK crit rating is unified
 			stats.ArmorPenetration: 61,
 			stats.Armor:            2032,
 		}.ToFloatArray(),
@@ -382,6 +389,7 @@ var ItemOverrides = []*proto.UIItem{
 			stats.Strength:         75,
 			stats.Stamina:          85,
 			stats.MeleeCrit:        63,
+			stats.SpellCrit:        63, // WotLK crit rating is unified
 			stats.ArmorPenetration: 46,
 			stats.Armor:            1580,
 		}.ToFloatArray(),
@@ -420,6 +428,7 @@ var ItemOverrides = []*proto.UIItem{
 			stats.AttackPower:       92,
 			stats.RangedAttackPower: 92,
 			stats.MeleeCrit:         35,
+			stats.SpellCrit:         35, // WotLK crit rating is unified
 			stats.MeleeHaste:        36,
 		}.ToFloatArray(),
 		GemSockets:  []proto.GemColor{proto.GemColor_GemColorBlue},
