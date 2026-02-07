@@ -1,193 +1,76 @@
-Welcome to the WoW WOTLK Classic simulator! If you have questions or are thinking about contributing, [join our discord](https://discord.gg/jJMPr9JWwx "https://discord.gg/jJMPr9JWwx") to chat!
+# WoW WOTLK Simulator (Fork)
 
-The primary goal of this project is to provide a framework that makes it easy to build a DPS sim for any class/spec, with a polished UI and accurate results. Each community will have ownership / responsibility over their portion of the sim, to ensure accuracy and that their community is represented. By having all the individual sims on the same engine, we can also have a combined 'raid sim' for testing raid compositions.
+Fork 自 [wowsims/wotlk](https://github.com/wowsims/wotlk)。
 
-This project is licensed with MIT license. We request that anyone using this software in their own project to make sure there is a user visible link back to the original project.
+## 使用方法
 
-[Live sims can be found here.](https://wowsims.github.io/wotlk "https://wowsims.github.io/wotlk")
+**前置**：需要代理（梯子），否则国内的可以不用看了。
 
-[Support our devs via Patreon.](https://www.patreon.com/wowsims)
+### 1. 配置代理
 
-# Downloading Sim
+在项目根目录的 `.env` 文件中设置代理，例如：
 
-Links for latest Sim build:
-- [Windows Sim](https://github.com/wowsims/wotlk/releases/latest/download/wowsimwotlk-windows.exe.zip)
-- [MacOS Sim](https://github.com/wowsims/wotlk/releases/latest/download/wowsimwotlk-amd64-darwin.zip)
-- [Linux Sim](https://github.com/wowsims/wotlk/releases/latest/download/wowsimwotlk-amd64-linux.zip)
-
-Then unzip the downloaded file, then open the unzipped file to open the sim in your browser!
-
-Alternatively, you can choose from a specific relase on the [Releases](https://github.com/wowsims/wotlk/releases) page and click the suitable link under "Assets"
-# Local Dev Installation
-
-This project has dependencies on Go >=1.21, protobuf-compiler and the corresponding Go plugins, and node >= 14.0.
-
-## Ubuntu
-Do not use apt to install any dependencies, the versions they install are all too old.
-Script below will curl latest versions and install them.
-```sh
-# Standard Go installation script
-curl -O https://dl.google.com/go/go1.21.1.linux-amd64.tar.gz
-sudo rm -rf /usr/local/go 
-sudo tar -C /usr/local -xzf go1.21.1.linux-amd64.tar.gz
-echo 'export PATH=$PATH:/usr/local/go/bin' >> $HOME/.bashrc
-echo 'export GOPATH=$HOME/go' >> $HOME/.bashrc
-echo 'export PATH=$PATH:$GOPATH/bin' >> $HOME/.bashrc
-source $HOME/.bashrc
-
-cd wotlk
-
-# Install protobuf compiler and Go plugins
-sudo apt update && sudo apt upgrade
-sudo apt install protobuf-compiler
-go get -u -v google.golang.org/protobuf
-go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
-
-# Install node
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
-nvm install 19.8.0
-
-# Install the npm package dependencies using node
-npm install
+```env
+HTTP_PROXY=http://127.0.0.1:7890
+HTTPS_PROXY=http://127.0.0.1:7890
 ```
+docker本身应该也需要设置代理
+### 2. 启动服务
 
-## Docker
-Alternatively, install Docker and your workflow will look something like this:
-```sh
-git clone https://github.com/wowsims/wotlk.git
-cd wotlk
+- **Windows**：`.\quick-test.ps1 start`
+- **Linux / macOS**：`./quick-test.sh start`（未在 Linux/mac 下完整测试）
 
-# Build the docker image and install npm dependencies (only need to run these once).
-docker build --tag wowsims-wotlk .
-docker run --rm -v $(pwd):/wotlk wowsims-wotlk npm install
+### 3. 添加自定义装备
 
-# Now you can run the commands as shown in the Commands sections, preceding everything with, "docker run --rm -it -p 8080:8080 -v $(pwd):/wotlk wowsims-wotlk".
-# For convenience, set this as an environment variable:
-WOTLK_CMD="docker run --rm -it -p 8080:8080 -v $(pwd):/wotlk wowsims-wotlk"
+1. **编辑 `tools/database/overrides.go`**
 
-# ... do some coding on the sim ...
+   - 在 **`ItemOverrides`** 中追加新装备，例如：
 
-# Run tests
-$(echo $WOTLK_CMD) make test
+   ```go
+   // 北境肩甲 (custom, DK plate shoulder)
+   {
+       Id:             257629,
+       Name:           "北境肩甲",
+       Type:           proto.ItemType_ItemTypeShoulder,
+       ArmorType:      proto.ArmorType_ArmorTypePlate,
+       Ilvl:           213,
+       Quality:        proto.ItemQuality_ItemQualityEpic,
+       SetName:        "北境",
+       ClassAllowlist: []proto.Class{proto.Class_ClassDeathknight},
+       Stats: stats.Stats{
+           stats.Strength:  75,
+           stats.Stamina:  85,
+           stats.MeleeCrit: 43,
+           stats.Expertise: 49,
+           stats.Armor:    1723,
+       }.ToFloatArray(),
+       GemSockets: []proto.GemColor{
+           proto.GemColor_GemColorYellow,
+       },
+       SocketBonus: stats.Stats{stats.Strength: 4}.ToFloatArray(),
+   },
+   ```
 
-# ... do some coding on the UI ...
+   - 在 **`ItemAllowList`** 中增加该装备的 ID：
 
-# Host a local site
-$(echo $WOTLK_CMD) make host
-```
+   ```go
+   257629: {}, // 北境肩甲 (custom override)
+   ```
 
-## Windows
-If you want to develop on Windows, we recommend setting up a Ubuntu virtual machine (VM) or running Docker using [this guide](https://docs.docker.com/desktop/windows/wsl/ "https://docs.docker.com/desktop/windows/wsl/") and then following the Ubuntu or Docker instructions, respectively.
+2. **重新生成数据并启动**
 
-## Mac OS
-* Docker is available in OS X as well, so in theory similar instructions should work for the Docker method
-* You can also use the Ubuntu setup instructions as above to run natively, with a few modifications:
-  * You may need a different Go installer if `go1.18.3.linux-amd64.tar.gz` is not compatible with your system's architecture; you can do the Go install manually from `https://go.dev/doc/install`.
-  * OS X uses Homebrew instead of apt, so in order to install protobuf-compiler you’ll instead need to run `brew install protobuf-c` (note the package name is also a little different than in apt). You might need to first update or upgrade brew.
-  * The provided install script for Node will not included a precompiled binary for OS X, but it’s smart enough to compile one. Be ready for your CPU to melt on running `curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash`.
+   ```powershell
+   .\quick-test.ps1 stop    # 停止容器，避免冲突
+   .\quick-test.ps1 items  # 重新生成装备数据
+   .\quick-test.ps1 ui     # 更新前端
+   .\quick-test.ps1 server # 重新编译服务端
+   .\quick-test.ps1 start  # 启动容器
+   ```
 
-# Commands
-We use a makefile for our build system. These commands will usually be all you need while developing for this project:
-```sh
-# Installs a pre-commit git hook so that your go code is automatically formatted (if you don't use an IDE that supports that).  If you want to manually format go code you can run make fmt.
-# Also installs `air` to reload the dev servers automatically
-make setup
+3. 浏览器打开 **http://localhost:3333**，使用字符串导入即可看到新增装备。
 
-# Run all the tests. Currently only the backend sim has tests.
-make test
+**提示**：可截图装备说明文字，交给 AI 生成对应的 `ItemOverrides` 条目。
 
-# Update the expected test results. This will need to be run after adding/removing any tests, and also if test results change due to code changes.
-make update-tests
+### 4. 其他
 
-# Host a local version of the UI at http://localhost:8080. Visit it by pointing a browser to
-# http://localhost:8080/wotlk/YOUR_SPEC_HERE, where YOUR_SPEC_HERE is the directory under ui/ with your custom code.
-# Recompiles the entire client before launching using `make dist/wotlk`
-make host
-
-# With file-watching so the server auto-restarts and recompiles on Go or TS changes:
-WATCH=1 make host
-
-# Delete all generated files (.pb.go and .ts proto files, and dist/)
-make clean
-
-# Recompiles the ts only for the given spec (e.g. make host_elemental_shaman)
-make host_$spec
-
-# Recompiles the `wowsimwotlk` server binary and runs it, hosting /dist directory at http://localhost:3333/wotlk. 
-# This is the fastest way to iterate on core go simulator code so you don't have to wait for client rebuilds.
-# To rebuild client for a spec just do 'make $spec' and refresh browser.
-make rundevserver
-
-# With file-watching so the server auto-restarts and recompiles on Go or TS changes:
-WATCH=1 make rundevserver
-
-# Creates the 'wowsimwotlk' binary that can host the UI and run simulations natively (instead of with wasm).
-# Builds the UI and the compiles it into the binary so that you can host the sim as a server instead of wasm on the client.
-# It does this by first doing make dist/wotlk and then copying all those files to binary_dist/wotlk and loading all the files in that directory into its binary on compile.
-make wowsimwotlk
-
-# Using the --usefs flag will instead of hosting the client built into the binary, it will host whatever code is found in the /dist directory. 
-# Use --wasm to host the client with the wasm simulator.
-# The server also disables all caching so that refreshes should pickup any changed files in dist/. The client will still call to the server to run simulations so you can iterate more quickly on client changes.
-# make dist/wotlk && ./wowsimwotlk --usefs would rebuild the whole client and host it. (you would have had to run `make devserver` to build the wowsimwotlk binary first.)
-./wowsimwotlk --usefs
-
-# Generate code for items. Only necessary if you changed the items generator.
-make items
-```
-
-# Adding a Sim
-So you want to make a new sim for your class/spec! The basic steps are as follows:
- - [Create the proto interface between sim and UI.](#create-the-proto-interface-between-sim-and-ui)
- - [Implement the UI.](#implement-the-ui)
- - [Implement the sim.](#implement-the-sim)
- - [Launch the site.](#launch-the-site)
-
-
-## Create the proto interface between Sim and UI
-This project uses [Google Protocol Buffers](https://developers.google.com/protocol-buffers/docs/gotutorial "https://developers.google.com/protocol-buffers/docs/gotutorial") to pass data between the sim and the UI. TLDR; Describe data structures in .proto files, and the tool can generate code in any programming language. It lets us avoid repeating the same code in our Go and Typescript worlds without losing type safety.
-
-For a new sim, make the following changes:
-  - Add a new value to the `Spec` enum in proto/common.proto. __NOTE: The name you give to this enum value is not just a name, it is used in our templating system. This guide will refer to this name as `$SPEC` elsewhere.__
-  - Add a 'proto/YOUR_CLASS.proto' file if it doesn't already exist and add data messages containing all the class/spec-specific information needed to run your sim.
-  - Update the `PlayerOptions.spec` field in `proto/api.proto` to include your shiny new message as an option.
-
-That's it! Now when you run `make` there will be generated .go and .ts code in `sim/core/proto` and `ui/core/proto` respectively. If you aren't familiar with protos, take a quick look at them to see what's happening.
-
-## Implement the UI
-The UI and sim can be done in either order, but it is generally recommended to build the UI first because it can help with debugging. The UI is very generalized and it doesn't take much work to build an entire sim UI using our templating system. To use it:
-  - Modify `ui/core/proto_utils/utils.ts` to include boilerplate for your `$SPEC` name if it isn't already there.
-  - Create a directory `ui/$SPEC`. So if your Spec enum value was named, `elemental_shaman`, create a directory, `ui/elemental_shaman`.
-  - Copy+paste from another spec's UI code.
-  - Modify all the files for your spec; most of the settings are fairly obvious, if you need anything complex just ask and we can help!
-  - Finally, add a rule to the `makefile` for the new sim site. Just copy from the other site rules already there and change the `$SPEC` names.
-
-No .html is needed, it will be generated based on `ui/index_template.html` and the `$SPEC` name.
-
-When you're ready to try out the site, run `make host` and navigate to `http://localhost:8080/wotlk/$SPEC`.
-
-## Implement the Sim
-This step is where most of the magic happens. A few highlights to start understanding the sim code:
-  - `sim/wasm/main.go` This file is the actual main function, for the [.wasm binary](https://webassembly.org/ "https://webassembly.org/") used by the UI. You shouldn't ever need to touch this, but just know its here.
-  - `sim/core/api.go` This is where the action starts. This file implements the request/response messages defined in `proto/api.proto`.
-  - `sim/core/sim.go` Orchestrates everything. Main event loop is in `Simulation.RunOnce`.
-  - `sim/core/agent.go` An Agent can be thought of as the 'Player', i.e. the person controlling the game. This is the interface you'll be implementing.
-  - `sim/core/character.go` A Character holds all the stats/cooldowns/gear/etc common to any WoW character. Each Agent has a Character that it controls.
-
-Read through the core code and some examples from other classes/specs to get a feel for what's needed. Hopefully `sim/core` already includes what you need, but most classes have at least 1 unique mechanic so you may need to touch `core` as well.
-
-Finally, add your new sim to `RegisterAll()` in `sim/register_all.go`.
-
-Don't forget to write unit tests! Again, look at existing tests for examples. Run them with `make test` when you're ready.
-
-# Launch the site
-When everything is ready for release, modify `ui/core/launched_sims.ts` and `ui/index.html` to include the new spec value. This will add the sim to the dropdown menu so anyone can find it from the existing sims. This will also remove the UI warning that the sim is under development. Now tell everyone about your new sim!
-
-# Add your spec to the raid sim
-Don't touch the raid sim until the individual sim is ready for launch; anything in the raid sim is publicly accessible. To add your new spec to the raid sim, do the following:
- - Add a reference to the individual sim in `ui/raid/tsconfig.json`. DO NOT FORGET THIS STEP or Typescipt will silently do very bad things.
- - Import the individual sim's css file from `ui/raid/index.scss`.
- - Update `ui/raid/presets.ts` to include a constructor factory in the `specSimFactories` variable and add configurations for new Players in the `playerPresets` variable.
-
-# Deployment
-Thanks to the workflow defined in `.github/workflows/deploy.yml`, pushes to `master` automatically build and deploy a new site so there's nothing to do here. Sit back and appreciate your new sim!
+- 自定义技能、天赋等仍在研究中，详见项目内相关文档。
