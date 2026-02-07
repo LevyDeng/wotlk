@@ -276,6 +276,27 @@ func (dk *Deathknight) registerScourgelordsPlateProc() {
 	}))
 }
 
+// 北境 (Northrend) custom set: 2pc Horn of Winter +5 RP, 4pc Death Coil & Frost Strike +5% damage
+var ItemSetNorthrend = core.NewItemSet(core.ItemSet{
+	Name: "北境",
+	Bonuses: map[int32]core.ApplyEffect{
+		2: func(agent core.Agent) {
+			// 你的寒冬号角在使用时额外产生5点符文能量
+		},
+		4: func(agent core.Agent) {
+			// 你的凋零缠绕和冰霜打击造成的伤害提高5%
+		},
+	},
+})
+
+func (dk *Deathknight) northrendSetHornOfWinterRunicPowerBonus() float64 {
+	return core.TernaryFloat64(dk.HasSetBonus(ItemSetNorthrend, 2), 5.0, 0.0)
+}
+
+func (dk *Deathknight) northrendSetDamageBonus() float64 {
+	return core.TernaryFloat64(dk.HasSetBonus(ItemSetNorthrend, 4), 1.05, 1.0)
+}
+
 func (dk *Deathknight) sigilOfTheDarkRiderBonus() float64 {
 	return core.TernaryFloat64(dk.Ranged().ID == 39208, 90, 0)
 }

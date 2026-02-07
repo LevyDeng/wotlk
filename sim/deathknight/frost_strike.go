@@ -35,7 +35,7 @@ func (dk *Deathknight) newFrostStrikeHitSpell(isMH bool) *core.Spell {
 		},
 
 		BonusCritRating: (dk.annihilationCritBonus() + dk.darkrunedBattlegearCritBonus()) * core.CritRatingPerCritChance,
-		DamageMultiplier: .55 *
+		DamageMultiplier: dk.northrendSetDamageBonus() * .55 *
 			core.TernaryFloat64(isMH, 1, dk.nervesOfColdSteelBonus()) *
 			dk.bloodOfTheNorthCoeff(),
 		CritMultiplier:   dk.bonusCritMultiplier(dk.Talents.GuileOfGorefiend),

@@ -25,8 +25,9 @@ func (dk *Deathknight) registerDeathCoilSpell() {
 		},
 
 		BonusCritRating: dk.darkrunedBattlegearCritBonus() * core.CritRatingPerCritChance,
-		DamageMultiplier: (1 + float64(dk.Talents.Morbidity)*0.05) +
-			core.TernaryFloat64(dk.HasMajorGlyph(proto.DeathknightMajorGlyph_GlyphOfDarkDeath), 0.15, 0.0),
+		DamageMultiplier: dk.northrendSetDamageBonus() *
+			((1 + float64(dk.Talents.Morbidity)*0.05) +
+				core.TernaryFloat64(dk.HasMajorGlyph(proto.DeathknightMajorGlyph_GlyphOfDarkDeath), 0.15, 0.0)),
 		CritMultiplier:   dk.DefaultMeleeCritMultiplier(),
 		ThreatMultiplier: 1.0,
 
