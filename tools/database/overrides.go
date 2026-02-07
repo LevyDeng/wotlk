@@ -198,6 +198,29 @@ var ItemOverrides = []*proto.UIItem{
 		SocketBonus: stats.Stats{stats.AttackPower: 16, stats.RangedAttackPower: 16}.ToFloatArray(),
 	},
 
+	// 北境肩甲 (custom, DK plate shoulder)
+	{
+		Id:             257629,
+		Name:           "北境肩甲",
+		Type:           proto.ItemType_ItemTypeShoulder,
+		ArmorType:      proto.ArmorType_ArmorTypePlate,
+		Ilvl:           213,
+		Quality:        proto.ItemQuality_ItemQualityEpic,
+		SetName:        "北境",
+		ClassAllowlist: []proto.Class{proto.Class_ClassDeathknight},
+		Stats: stats.Stats{
+			stats.Strength:  75,
+			stats.Stamina:  85,
+			stats.MeleeCrit: 43,
+			stats.Expertise: 49,
+			stats.Armor:    1723,
+		}.ToFloatArray(),
+		GemSockets: []proto.GemColor{
+			proto.GemColor_GemColorYellow,
+		},
+		SocketBonus: stats.Stats{stats.Strength: 4}.ToFloatArray(),
+	},
+
 	// 北境战盔 (custom, replace Id with real item ID when known)
 	{
 		Id:             257631,
@@ -224,6 +247,185 @@ var ItemOverrides = []*proto.UIItem{
 		},
 		SocketBonus: stats.Stats{stats.Strength: 8}.ToFloatArray(),
 	},
+
+	// 暗铁作战披风 (custom, back cloth)
+	{
+		Id:         30729,
+		Name:       "暗铁作战披风",
+		Type:       proto.ItemType_ItemTypeBack,
+		ArmorType:  proto.ArmorType_ArmorTypeCloth,
+		Ilvl:       219,
+		Quality:    proto.ItemQuality_ItemQualityEpic,
+		Stats: stats.Stats{
+			stats.Strength:  60,
+			stats.Stamina:  60,
+			stats.MeleeCrit: 60,
+			stats.MeleeHaste: 40,
+			stats.Armor:     155,
+		}.ToFloatArray(),
+	},
+
+	// 稳固护腕 (custom, leather wrist)
+	{
+		Id:             259901,
+		Name:            "稳固护腕",
+		Type:            proto.ItemType_ItemTypeWrist,
+		ArmorType:       proto.ArmorType_ArmorTypeLeather,
+		Ilvl:            213,
+		Quality:         proto.ItemQuality_ItemQualityEpic,
+		Stats: stats.Stats{
+			stats.Agility:          42,
+			stats.Stamina:           52,
+			stats.AttackPower:       97,
+			stats.RangedAttackPower: 97,
+			stats.MeleeHaste:        19,
+			stats.ArmorPenetration:  29,
+			stats.Armor:             253,
+		}.ToFloatArray(),
+		GemSockets: []proto.GemColor{proto.GemColor_GemColorYellow},
+		SocketBonus: stats.Stats{stats.ArmorPenetration: 4}.ToFloatArray(),
+	},
+
+	// 残忍利刃 (custom, 1H sword)
+	{
+		Id:               255132,
+		Name:             "残忍利刃",
+		Type:             proto.ItemType_ItemTypeWeapon,
+		WeaponType:       proto.WeaponType_WeaponTypeSword,
+		HandType:         proto.HandType_HandTypeOneHand,
+		Ilvl:             213,
+		Quality:          proto.ItemQuality_ItemQualityEpic,
+		Unique:           true,
+		WeaponDamageMin:  274,
+		WeaponDamageMax:  509,
+		WeaponSpeed:      2.5,
+		Stats: stats.Stats{
+			stats.Agility:          36,
+			stats.Stamina:           45,
+			stats.AttackPower:       73,
+			stats.RangedAttackPower: 73,
+			stats.MeleeCrit:         28,
+			stats.ArmorPenetration:  19,
+		}.ToFloatArray(),
+	},
+
+	// 烈焰守卫护手 (custom, plate hands)
+	{
+		Id:             255146,
+		Name:           "烈焰守卫护手",
+		Type:           proto.ItemType_ItemTypeHands,
+		ArmorType:      proto.ArmorType_ArmorTypePlate,
+		Ilvl:           213,
+		Quality:        proto.ItemQuality_ItemQualityEpic,
+		Stats: stats.Stats{
+			stats.Strength:         79,
+			stats.Stamina:          88,
+			stats.MeleeCrit:        52,
+			stats.ArmorPenetration: 40,
+			stats.Armor:            1436,
+		}.ToFloatArray(),
+		GemSockets: []proto.GemColor{proto.GemColor_GemColorRed},
+		SocketBonus: stats.Stats{stats.Strength: 4}.ToFloatArray(),
+	},
+
+	// 北境腰带 (custom, DK plate waist)
+	{
+		Id:             257628,
+		Name:           "北境腰带",
+		Type:           proto.ItemType_ItemTypeWaist,
+		ArmorType:      proto.ArmorType_ArmorTypePlate,
+		Ilvl:           213,
+		Quality:        proto.ItemQuality_ItemQualityEpic,
+		SetName:        "北境",
+		ClassAllowlist: []proto.Class{proto.Class_ClassDeathknight},
+		Stats: stats.Stats{
+			stats.Strength:  75,
+			stats.Stamina:  88,
+			stats.MeleeHaste: 63,
+			stats.Expertise: 44,
+			stats.Armor:    1293,
+		}.ToFloatArray(),
+	},
+
+	// 血警卫的护胫 (custom, plate legs)
+	{
+		Id:             29950,
+		Name:           "血警卫的护胫",
+		Type:           proto.ItemType_ItemTypeLegs,
+		ArmorType:      proto.ArmorType_ArmorTypePlate,
+		Ilvl:           219,
+		Quality:        proto.ItemQuality_ItemQualityEpic,
+		Stats: stats.Stats{
+			stats.Strength:         74,
+			stats.Stamina:          97,
+			stats.MeleeCrit:        92,
+			stats.ArmorPenetration: 61,
+			stats.Armor:            2032,
+		}.ToFloatArray(),
+		GemSockets: []proto.GemColor{
+			proto.GemColor_GemColorRed,
+			proto.GemColor_GemColorYellow,
+			proto.GemColor_GemColorBlue,
+		},
+		SocketBonus: stats.Stats{stats.Strength: 8}.ToFloatArray(),
+	},
+
+	// 北境长靴 (custom, DK plate feet)
+	{
+		Id:             257633,
+		Name:           "北境长靴",
+		Type:           proto.ItemType_ItemTypeFeet,
+		ArmorType:      proto.ArmorType_ArmorTypePlate,
+		Ilvl:           213,
+		Quality:        proto.ItemQuality_ItemQualityEpic,
+		SetName:        "北境",
+		ClassAllowlist: []proto.Class{proto.Class_ClassDeathknight},
+		Stats: stats.Stats{
+			stats.Strength:         75,
+			stats.Stamina:          85,
+			stats.MeleeCrit:        63,
+			stats.ArmorPenetration: 46,
+			stats.Armor:            1580,
+		}.ToFloatArray(),
+	},
+
+	// 海洋之风 (custom, ring unique)
+	{
+		Id:             255106,
+		Name:           "海洋之风",
+		Type:           proto.ItemType_ItemTypeFinger,
+		Ilvl:           213,
+		Quality:        proto.ItemQuality_ItemQualityEpic,
+		Unique:         true,
+		Stats: stats.Stats{
+			stats.Agility:           27,
+			stats.Stamina:            29,
+			stats.AttackPower:        113,
+			stats.RangedAttackPower:  113,
+			stats.MeleeHit:           35,
+			stats.FireResistance:     35,
+		}.ToFloatArray(),
+		GemSockets: []proto.GemColor{proto.GemColor_GemColorRed},
+	},
+
+	// 永恒之戒 (custom, ring)
+	{
+		Id:             29298,
+		Name:           "永恒之戒",
+		Type:           proto.ItemType_ItemTypeFinger,
+		Ilvl:           219,
+		Quality:        proto.ItemQuality_ItemQualityEpic,
+		Stats: stats.Stats{
+			stats.Agility:           35,
+			stats.Stamina:            56,
+			stats.AttackPower:        92,
+			stats.RangedAttackPower:  92,
+			stats.MeleeCrit:          35,
+			stats.MeleeHaste:         36,
+		}.ToFloatArray(),
+		GemSockets: []proto.GemColor{proto.GemColor_GemColorBlue},
+		SocketBonus: stats.Stats{stats.MeleeHit: 4}.ToFloatArray(),
+	},
 }
 
 // Keep these sorted by item ID.
@@ -242,8 +444,18 @@ var ItemAllowList = map[int32]struct{}{
 	21625:  {}, // Scarab Brooch
 	21685:  {}, // Petrified Scarab
 	24114:  {}, // Braided Eternium Chain
+	255106: {}, // 海洋之风 (custom override)
 	255125: {}, // 毁灭王冠 (custom override)
+	255132: {}, // 残忍利刃 (custom override)
+	255146: {}, // 烈焰守卫护手 (custom override)
+	257628: {}, // 北境腰带 (custom override)
+	257629: {}, // 北境肩甲 (custom override)
 	257631: {}, // 北境战盔 (custom override)
+	257633: {}, // 北境长靴 (custom override)
+	259901: {}, // 稳固护腕 (custom override)
+	29298:  {}, // 永恒之戒 (custom override)
+	29950:  {}, // 血警卫的护胫 (custom override)
+	30729:  {}, // 暗铁作战披风 (custom override)
 	28572:  {}, // Blade of the Unrequited
 	28830:  {}, // Dragonspine Trophy
 	29383:  {}, // Bloodlust Brooch

@@ -1,10 +1,10 @@
 # Quick Test Script for Development
 # Rebuilds only changed code and restarts the server
-# Usage: .\quick-test.ps1 [start|items|server|ui|full|restart] [-Proxy <url>]
+# Usage: .\quick-test.ps1 [start|stop|items|server|ui|full|restart] [-Proxy <url>]
 
 param(
     [Parameter(Position=0)]
-    [ValidateSet("start", "items", "server", "ui", "full", "restart")]
+    [ValidateSet("start", "stop", "items", "server", "ui", "full", "restart")]
     [string]$Target = "server",
     [Parameter()]
     [string]$Proxy = ""
@@ -176,11 +176,23 @@ switch ($Target) {
         }
     }
 
+    "stop" {
+        Write-Info "Stopping dev container..."
+
+        if (Test-ContainerRunning) {
+            docker stop $CONTAINER_NAME
+            Write-Info "Container $CONTAINER_NAME stopped."
+        } else {
+            Write-Info "Container $CONTAINER_NAME is not running."
+        }
+    }
+
     default {
-        Write-Host "Usage: .\quick-test.ps1 [start|items|server|ui|full|restart]"
+        Write-Host "Usage: .\quick-test.ps1 [start|stop|items|server|ui|full|restart]"
         Write-Host ""
         Write-Host "Commands:"
         Write-Host "  start   - Start dev container (docker-compose.dev.yml, build if needed)"
+        Write-Host "  stop    - Stop dev container"
         Write-Host "  items   - Regenerate items database only (fastest)"
         Write-Host "  server  - Rebuild server binary only"
         Write-Host "  ui      - Rebuild UI only"

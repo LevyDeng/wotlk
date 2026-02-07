@@ -147,11 +147,23 @@ case "$TARGET" in
         fi
         ;;
 
+    stop)
+        print_info "Stopping dev container..."
+
+        if is_running; then
+            docker stop $CONTAINER_NAME
+            print_info "Container $CONTAINER_NAME stopped."
+        else
+            print_info "Container $CONTAINER_NAME is not running."
+        fi
+        ;;
+
     *)
-        echo "Usage: ./quick-test.sh [start|items|server|ui|full|restart]"
+        echo "Usage: ./quick-test.sh [start|stop|items|server|ui|full|restart]"
         echo ""
         echo "Commands:"
         echo "  start   - Start dev container (docker-compose.dev.yml, build if needed)"
+        echo "  stop    - Stop dev container"
         echo "  items   - Regenerate items database only (fastest)"
         echo "  server  - Rebuild server binary only"
         echo "  ui      - Rebuild UI only"
