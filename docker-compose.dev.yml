@@ -31,7 +31,7 @@ services:
     working_dir: /wotlk
     # Build frontend only when dist is empty; then build server and run (fast after first run)
     command: sh -c "if [ ! -f dist/wotlk/mage/index.html ]; then npm install && make binary_dist; fi && make devserver && exec ./wowsimwotlk --usefs=true --host=:3333 --launch=false"
-    restart: unless-stopped
+    restart: "no"  # 不随系统开机自启
     networks:
       - wowsims-network
 

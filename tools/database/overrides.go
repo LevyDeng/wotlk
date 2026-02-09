@@ -415,7 +415,7 @@ var ItemOverrides = []*proto.UIItem{
 		GemSockets: []proto.GemColor{proto.GemColor_GemColorRed},
 	},
 
-	// 永恒之戒 (custom, ring)
+	// 永恒之戒 (custom, ring, melee)
 	{
 		Id:      29298,
 		Name:    "永恒之戒",
@@ -433,6 +433,284 @@ var ItemOverrides = []*proto.UIItem{
 		}.ToFloatArray(),
 		GemSockets:  []proto.GemColor{proto.GemColor_GemColorBlue},
 		SocketBonus: stats.Stats{stats.MeleeHit: 4, stats.SpellHit: 4}.ToFloatArray(),
+	},
+
+	// 黑光护腕 (custom, cloth wrist)
+	{
+		Id:        19135,
+		Name:      "黑光护腕",
+		Type:      proto.ItemType_ItemTypeWrist,
+		ArmorType: proto.ArmorType_ArmorTypeCloth,
+		Ilvl:      213,
+		Quality:   proto.ItemQuality_ItemQualityEpic,
+		Stats: stats.Stats{
+			stats.Stamina:    41,
+			stats.Intellect:  43,
+			stats.Spirit:     25,
+			stats.SpellPower: 66,
+			stats.MeleeHit:   29,
+			stats.SpellHit:   29, // WotLK hit rating is unified
+			stats.Armor:      135,
+		}.ToFloatArray(),
+		GemSockets:  []proto.GemColor{proto.GemColor_GemColorBlue},
+		SocketBonus: stats.Stats{stats.Intellect: 4}.ToFloatArray(),
+	},
+
+	// 奥术师便鞋 (custom, cloth feet, 奥术师 set)
+	{
+		Id:             255016,
+		Name:           "奥术师便鞋",
+		Type:           proto.ItemType_ItemTypeFeet,
+		ArmorType:      proto.ArmorType_ArmorTypeCloth,
+		Ilvl:           213,
+		Quality:        proto.ItemQuality_ItemQualityEpic,
+		SetName:        "奥术师",
+		ClassAllowlist: []proto.Class{proto.Class_ClassMage, proto.Class_ClassPriest, proto.Class_ClassWarlock},
+		Stats: stats.Stats{
+			stats.Stamina:    71,
+			stats.Intellect:  66,
+			stats.SpellPower: 87,
+			stats.MeleeHit:   41,
+			stats.SpellHit:   41, // WotLK hit rating is unified
+			stats.MeleeCrit:  33,
+			stats.SpellCrit:  33, // WotLK crit rating is unified
+			stats.Armor:      212,
+		}.ToFloatArray(),
+	},
+
+	// 奥术师手套 (custom, cloth hands, 奥术师 set)
+	{
+		Id:             255017,
+		Name:           "奥术师手套",
+		Type:           proto.ItemType_ItemTypeHands,
+		ArmorType:      proto.ArmorType_ArmorTypeCloth,
+		Ilvl:           213,
+		Quality:        proto.ItemQuality_ItemQualityEpic,
+		SetName:        "奥术师",
+		ClassAllowlist: []proto.Class{proto.Class_ClassMage, proto.Class_ClassPriest, proto.Class_ClassWarlock},
+		Stats: stats.Stats{
+			stats.Stamina:    65,
+			stats.Intellect:  57,
+			stats.SpellPower: 79,
+			stats.MeleeCrit:  30,
+			stats.SpellCrit:  30, // WotLK crit rating is unified
+			stats.SpellHaste: 46,
+			stats.Armor:      192,
+		}.ToFloatArray(),
+		GemSockets:  []proto.GemColor{proto.GemColor_GemColorRed},
+		SocketBonus: stats.Stats{stats.Intellect: 4}.ToFloatArray(),
+	},
+
+	// 潮汐指环 (custom, ring unique)
+	{
+		Id:      255105,
+		Name:    "潮汐指环",
+		Type:    proto.ItemType_ItemTypeFinger,
+		Ilvl:    213,
+		Quality: proto.ItemQuality_ItemQualityEpic,
+		Unique:  true,
+		Stats: stats.Stats{
+			stats.Stamina:        39,
+			stats.Intellect:      34,
+			stats.SpellPower:     66,
+			stats.MeleeHit:       23,
+			stats.SpellHit:       23, // WotLK hit rating is unified
+			stats.FireResistance: 35,
+		}.ToFloatArray(),
+		GemSockets: []proto.GemColor{proto.GemColor_GemColorRed},
+	},
+
+	// 统御法杖 (custom, 2H staff unique)
+	{
+		Id:              255133,
+		Name:            "统御法杖",
+		Type:            proto.ItemType_ItemTypeWeapon,
+		WeaponType:      proto.WeaponType_WeaponTypeStaff,
+		HandType:        proto.HandType_HandTypeTwoHand,
+		Ilvl:            219,
+		Quality:         proto.ItemQuality_ItemQualityEpic,
+		Unique:          true,
+		WeaponDamageMin: 292,
+		WeaponDamageMax: 539,
+		WeaponSpeed:     2.9,
+		Stats: stats.Stats{
+			stats.Stamina:    113,
+			stats.Intellect:  103,
+			stats.Spirit:     64,
+			stats.SpellPower: 487,
+			stats.MeleeCrit:  96,
+			stats.SpellCrit:  96, // WotLK crit rating is unified
+		}.ToFloatArray(),
+	},
+
+	// 法力风暴护腿 (custom, cloth legs)
+	{
+		Id:        255136,
+		Name:      "法力风暴护腿",
+		Type:      proto.ItemType_ItemTypeLegs,
+		ArmorType: proto.ArmorType_ArmorTypeCloth,
+		Ilvl:      213,
+		Quality:   proto.ItemQuality_ItemQualityEpic,
+		Stats: stats.Stats{
+			stats.Stamina:    74,
+			stats.Intellect:  64,
+			stats.SpellPower: 115,
+			stats.MP5:        17,
+			stats.MeleeCrit:  42,
+			stats.SpellCrit:  42, // WotLK crit rating is unified
+			stats.Armor:      269,
+		}.ToFloatArray(),
+		GemSockets: []proto.GemColor{
+			proto.GemColor_GemColorRed,
+			proto.GemColor_GemColorYellow,
+		},
+		SocketBonus: stats.Stats{stats.MP5: 2}.ToFloatArray(),
+	},
+
+	// 波动长袍 (custom, cloth chest)
+	{
+		Id:        255148,
+		Name:      "波动长袍",
+		Type:      proto.ItemType_ItemTypeChest,
+		ArmorType: proto.ArmorType_ArmorTypeCloth,
+		Ilvl:      219,
+		Quality:   proto.ItemQuality_ItemQualityEpic,
+		Stats: stats.Stats{
+			stats.Stamina:    78,
+			stats.Intellect:  72,
+			stats.Spirit:     52,
+			stats.SpellPower: 108,
+			stats.MeleeCrit:  93,
+			stats.SpellCrit:  93, // WotLK crit rating is unified
+			stats.Armor:      311,
+		}.ToFloatArray(),
+		GemSockets:  []proto.GemColor{proto.GemColor_GemColorRed},
+		SocketBonus: stats.Stats{stats.MeleeCrit: 4, stats.SpellCrit: 4}.ToFloatArray(),
+	},
+
+	// 赤红震荡者 (custom, ranged wand)
+	{
+		Id:               259900,
+		Name:             "赤红震荡者",
+		Type:             proto.ItemType_ItemTypeRanged,
+		RangedWeaponType: proto.RangedWeaponType_RangedWeaponTypeWand,
+		Ilvl:             213,
+		Quality:          proto.ItemQuality_ItemQualityEpic,
+		WeaponDamageMin:  402,
+		WeaponDamageMax:  748,
+		WeaponSpeed:      2.0,
+		Stats: stats.Stats{
+			stats.Stamina:    27,
+			stats.Intellect:  23,
+			stats.Spirit:     20,
+			stats.SpellPower: 39,
+			stats.MeleeCrit:  14,
+			stats.SpellCrit:  14, // WotLK crit rating is unified
+		}.ToFloatArray(),
+	},
+
+	// 防火披风 (custom, cloth back)
+	{
+		Id:        259903,
+		Name:      "防火披风",
+		Type:      proto.ItemType_ItemTypeBack,
+		ArmorType: proto.ArmorType_ArmorTypeCloth,
+		Ilvl:      213,
+		Quality:   proto.ItemQuality_ItemQualityEpic,
+		Stats: stats.Stats{
+			stats.Stamina:        56,
+			stats.Intellect:      43,
+			stats.SpellPower:     66,
+			stats.MP5:            13,
+			stats.MeleeCrit:      27,
+			stats.SpellCrit:      27, // WotLK crit rating is unified
+			stats.FireResistance: 21,
+			stats.Armor:          154,
+		}.ToFloatArray(),
+	},
+
+	// 永恒之戒 (custom, ring caster version)
+	{
+		Id:      29302,
+		Name:    "永恒之戒",
+		Type:    proto.ItemType_ItemTypeFinger,
+		Ilvl:    219,
+		Quality: proto.ItemQuality_ItemQualityEpic,
+		Stats: stats.Stats{
+			stats.Stamina:    43,
+			stats.Intellect:  37,
+			stats.SpellPower: 69,
+			stats.MeleeHit:   35,
+			stats.SpellHit:   35, // WotLK hit rating is unified
+			stats.MeleeCrit:  41,
+			stats.SpellCrit:  41, // WotLK crit rating is unified
+		}.ToFloatArray(),
+		GemSockets:  []proto.GemColor{proto.GemColor_GemColorBlue},
+		SocketBonus: stats.Stats{stats.MeleeHit: 4, stats.SpellHit: 4}.ToFloatArray(),
+	},
+
+	// 流失岁月坠饰 (custom, neck)
+	{
+		Id:      30008,
+		Name:    "流失岁月坠饰",
+		Type:    proto.ItemType_ItemTypeNeck,
+		Ilvl:    219,
+		Quality: proto.ItemQuality_ItemQualityEpic,
+		Stats: stats.Stats{
+			stats.Stamina:    52,
+			stats.Intellect:  37,
+			stats.SpellPower: 61,
+			stats.MeleeCrit:  26,
+			stats.SpellCrit:  26, // WotLK crit rating is unified
+			stats.SpellHaste: 39,
+		}.ToFloatArray(),
+		GemSockets:  []proto.GemColor{proto.GemColor_GemColorBlue},
+		SocketBonus: stats.Stats{stats.MeleeCrit: 4, stats.SpellCrit: 4}.ToFloatArray(),
+	},
+
+	// 提瑞斯法护肩 (custom, cloth shoulder, 提瑞斯法 set)
+	{
+		Id:             30210,
+		Name:           "提瑞斯法护肩",
+		Type:           proto.ItemType_ItemTypeShoulder,
+		ArmorType:      proto.ArmorType_ArmorTypeCloth,
+		Ilvl:           219,
+		Quality:        proto.ItemQuality_ItemQualityEpic,
+		SetName:        "提瑞斯法",
+		ClassAllowlist: []proto.Class{proto.Class_ClassMage, proto.Class_ClassPriest, proto.Class_ClassWarlock},
+		Stats: stats.Stats{
+			stats.Stamina:    65,
+			stats.Intellect:  59,
+			stats.SpellPower: 76,
+			stats.MeleeCrit:  51,
+			stats.SpellCrit:  51, // WotLK crit rating is unified
+			stats.SpellHaste: 42,
+			stats.Armor:      233,
+		}.ToFloatArray(),
+	},
+
+	// 水晶头冠 (custom, cloth head ilvl 219)
+	{
+		Id:        19132,
+		Name:      "水晶头冠",
+		Type:      proto.ItemType_ItemTypeHead,
+		ArmorType: proto.ArmorType_ArmorTypeCloth,
+		Ilvl:      219,
+		Quality:   proto.ItemQuality_ItemQualityEpic,
+		Stats: stats.Stats{
+			stats.Stamina:    64,
+			stats.Intellect:  76,
+			stats.SpellPower: 116,
+			stats.MP5:        27,
+			stats.MeleeCrit:  37,
+			stats.SpellCrit:  37, // WotLK crit rating is unified
+			stats.Armor:      253,
+		}.ToFloatArray(),
+		GemSockets: []proto.GemColor{
+			proto.GemColor_GemColorMeta,
+			proto.GemColor_GemColorBlue,
+		},
+		SocketBonus: stats.Stats{stats.SpellPower: 9}.ToFloatArray(),
 	},
 }
 
@@ -452,17 +730,30 @@ var ItemAllowList = map[int32]struct{}{
 	21625:  {}, // Scarab Brooch
 	21685:  {}, // Petrified Scarab
 	24114:  {}, // Braided Eternium Chain
+	19132:  {}, // 水晶头冠 (custom override)
+	19135:  {}, // 黑光护腕 (custom override)
+	255016: {}, // 奥术师便鞋 (custom override)
+	255017: {}, // 奥术师手套 (custom override)
+	255105: {}, // 潮汐指环 (custom override)
 	255106: {}, // 海洋之风 (custom override)
 	255125: {}, // 毁灭王冠 (custom override)
 	255132: {}, // 残忍利刃 (custom override)
+	255133: {}, // 统御法杖 (custom override)
+	255136: {}, // 法力风暴护腿 (custom override)
 	255146: {}, // 烈焰守卫护手 (custom override)
+	255148: {}, // 波动长袍 (custom override)
 	257628: {}, // 北境腰带 (custom override)
 	257629: {}, // 北境肩甲 (custom override)
 	257631: {}, // 北境战盔 (custom override)
 	257633: {}, // 北境长靴 (custom override)
+	259900: {}, // 赤红震荡者 (custom override)
 	259901: {}, // 稳固护腕 (custom override)
-	29298:  {}, // 永恒之戒 (custom override)
+	259903: {}, // 防火披风 (custom override)
+	29298:  {}, // 永恒之戒 melee (custom override)
+	29302:  {}, // 永恒之戒 caster (custom override)
 	29950:  {}, // 血警卫的护胫 (custom override)
+	30008:  {}, // 流失岁月坠饰 (custom override)
+	30210:  {}, // 提瑞斯法护肩 (custom override)
 	30729:  {}, // 暗铁作战披风 (custom override)
 	28572:  {}, // Blade of the Unrequited
 	28830:  {}, // Dragonspine Trophy

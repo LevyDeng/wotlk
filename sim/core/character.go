@@ -696,7 +696,7 @@ func FillTalentsProto(data protoreflect.Message, talentsStr string, treeSizes [3
 			talentOffset := offset + talentIdx + 1
 			fd := fieldDescriptors.ByNumber(protowire.Number(talentOffset))
 			if fd == nil {
-				panic(fmt.Sprintf("Couldn't find proto field for talent #%d, full string: %s", talentOffset, talentsStr))
+				panic(fmt.Sprintf("Couldn't find proto field for talent #%d (offset %d)", talentOffset, talentOffset))
 			}
 			if fd.Kind() == protoreflect.BoolKind {
 				data.Set(fd, protoreflect.ValueOfBool(talentVal == 1))

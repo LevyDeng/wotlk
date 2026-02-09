@@ -655,8 +655,14 @@ func (mage *Mage) applyFingersOfFrost() {
 		return
 	}
 
+	// 10%/20% proc chance (2 points); treat target as frozen = 5x with 长枪法师 else 3x (4x with glyph)
 	bonusCrit := []float64{0, 17, 34, 50}[mage.Talents.Shatter] * core.CritRatingPerCritChance
-	iceLanceMultiplier := core.TernaryFloat64(mage.HasMajorGlyph(proto.MageMajorGlyph_GlyphOfIceLance), 4, 3)
+	iceLanceMultiplier := 3.0
+	if mage.Talents.IceLanceMaster {
+		iceLanceMultiplier = 5.0
+	} else if mage.HasMajorGlyph(proto.MageMajorGlyph_GlyphOfIceLance) {
+		iceLanceMultiplier = 4.0
+	}
 
 	var proccedAt time.Duration
 
@@ -680,7 +686,7 @@ func (mage *Mage) applyFingersOfFrost() {
 		},
 	})
 
-	procChance := []float64{0, .07, .15}[mage.Talents.FingersOfFrost]
+	procChance := []float64{0, .10, .20}[mage.Talents.FingersOfFrost]
 	mage.RegisterAura(core.Aura{
 		Label:    "Fingers of Frost Talent",
 		Duration: core.NeverExpires,
@@ -702,8 +708,10 @@ func (mage *Mage) applyBrainFreeze() {
 		return
 	}
 
+	// 2 points: 8%/15% proc; instant + no mana + 15%/30% damage
 	hasT8_4pc := mage.HasSetBonus(ItemSetKirinTorGarb, 4)
 	t10ProcAura := mage.BloodmagesRegalia2pcAura()
+	damageBonus := []float64{0, 0.15, 0.30}[mage.Talents.BrainFreeze]
 
 	mage.BrainFreezeAura = mage.RegisterAura(core.Aura{
 		Label:    "Brain Freeze Proc",
@@ -712,14 +720,18 @@ func (mage *Mage) applyBrainFreeze() {
 		OnGain: func(aura *core.Aura, sim *core.Simulation) {
 			mage.Fireball.CostMultiplier -= 100
 			mage.Fireball.CastTimeMultiplier -= 1
+			mage.Fireball.DamageMultiplierAdditive += damageBonus
 			mage.FrostfireBolt.CostMultiplier -= 100
 			mage.FrostfireBolt.CastTimeMultiplier -= 1
+			mage.FrostfireBolt.DamageMultiplierAdditive += damageBonus
 		},
 		OnExpire: func(aura *core.Aura, sim *core.Simulation) {
 			mage.Fireball.CostMultiplier += 100
 			mage.Fireball.CastTimeMultiplier += 1
+			mage.Fireball.DamageMultiplierAdditive -= damageBonus
 			mage.FrostfireBolt.CostMultiplier += 100
 			mage.FrostfireBolt.CastTimeMultiplier += 1
+			mage.FrostfireBolt.DamageMultiplierAdditive -= damageBonus
 			if t10ProcAura != nil {
 				t10ProcAura.Activate(sim)
 			}
@@ -733,7 +745,7 @@ func (mage *Mage) applyBrainFreeze() {
 		},
 	})
 
-	procChance := .05 * float64(mage.Talents.BrainFreeze)
+	procChance := []float64{0, .08, .15}[mage.Talents.BrainFreeze]
 	mage.RegisterAura(core.Aura{
 		Label:    "Brain Freeze Talent",
 		Duration: core.NeverExpires,

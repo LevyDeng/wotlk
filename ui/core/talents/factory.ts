@@ -1,25 +1,23 @@
 import { Player } from '../player.js';
-import { Class } from '../proto/common.js';
-import { Spec } from '../proto/common.js';
+import { Class , Spec } from '../proto/common.js';
 import {
 	SpecTalents,
 	specToClass,
 	specTypeFunctions,
 } from '../proto_utils/utils.js';
 import { EventID, TypedEvent } from '../typed_event.js';
-
-import { druidTalentsConfig, druidGlyphsConfig } from './druid.js';
-import { hunterTalentsConfig, hunterGlyphsConfig } from './hunter.js';
-import { mageTalentsConfig, mageGlyphsConfig } from './mage.js';
-import { paladinTalentsConfig, paladinGlyphsConfig } from './paladin.js';
-import { priestTalentsConfig, priestGlyphsConfig } from './priest.js';
-import { rogueTalentsConfig, rogueGlyphsConfig } from './rogue.js';
-import { shamanTalentsConfig, shamanGlyphsConfig } from './shaman.js';
-import { warlockTalentsConfig, warlockGlyphsConfig } from './warlock.js';
-import { warriorTalentsConfig, warriorGlyphsConfig } from './warrior.js';
-import { deathknightTalentsConfig, deathknightGlyphsConfig } from './deathknight.js';
-import { TalentsConfig } from './talents_picker.js';
+import { deathknightGlyphsConfig,deathknightTalentsConfig } from './deathknight.js';
+import { druidGlyphsConfig,druidTalentsConfig } from './druid.js';
 import { GlyphsConfig } from './glyphs_picker.js';
+import { hunterGlyphsConfig,hunterTalentsConfig } from './hunter.js';
+import { mageGlyphsConfig,mageTalentsConfig } from './mage.js';
+import { paladinGlyphsConfig,paladinTalentsConfig } from './paladin.js';
+import { priestGlyphsConfig,priestTalentsConfig } from './priest.js';
+import { rogueGlyphsConfig,rogueTalentsConfig } from './rogue.js';
+import { shamanGlyphsConfig,shamanTalentsConfig } from './shaman.js';
+import { TalentsConfig } from './talents_picker.js';
+import { warlockGlyphsConfig,warlockTalentsConfig } from './warlock.js';
+import { warriorGlyphsConfig,warriorTalentsConfig } from './warrior.js';
 
 export const classTalentsConfig: Record<Class, TalentsConfig<any>> = {
 	[Class.ClassUnknown]: [],
@@ -79,8 +77,10 @@ export function playerTalentStringToProto<SpecType extends Spec>(spec: Spec, tal
 export function talentStringToProto<TalentsProto>(proto: TalentsProto, talentString: string, talentsConfig: TalentsConfig<TalentsProto>): TalentsProto {
 	talentString.split('-').forEach((treeString, treeIdx) => {
 		const treeConfig = talentsConfig[treeIdx];
+		if (!treeConfig) return;
 		[...treeString].forEach((talentString, i) => {
 			const talentConfig = treeConfig.talents[i];
+			if (!talentConfig) return;
 			const points = parseInt(talentString);
 			if (talentConfig.fieldName) {
 				if (talentConfig.maxPoints == 1) {

@@ -14,7 +14,7 @@ const (
 	HotStreakSpells = core.SpellFlagAgentReserved3
 )
 
-var TalentTreeSizes = [3]int{30, 28, 28}
+var TalentTreeSizes = [3]int{30, 28, 32} // Frost tree has 32 (incl. wintersCurtain, coldFront, frozenOrb)
 
 func RegisterMage() {
 	core.RegisterAgentFactory(

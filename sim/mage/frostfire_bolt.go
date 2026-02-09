@@ -8,7 +8,8 @@ import (
 )
 
 func (mage *Mage) registerFrostfireBoltSpell() {
-	spellCoeff := 3.0/3.5 + .05*float64(mage.Talents.EmpoweredFire)
+	// EmpoweredFrostbolt also affects FFB: +5%/10% SP
+	spellCoeff := 3.0/3.5 + .05*float64(mage.Talents.EmpoweredFire) + .05*float64(mage.Talents.EmpoweredFrostbolt)
 	bonusPeriodicDamageMultiplier := -core.TernaryFloat64(mage.HasMajorGlyph(proto.MageMajorGlyph_GlyphOfFrostfire), .02, 0)
 
 	mage.FrostfireBolt = mage.RegisterSpell(core.SpellConfig{
@@ -42,7 +43,7 @@ func (mage *Mage) registerFrostfireBoltSpell() {
 			(1 + .04*float64(mage.Talents.TormentTheWeak)),
 		DamageMultiplierAdditive: 1 +
 			.02*float64(mage.Talents.FirePower) +
-			.01*float64(mage.Talents.ChilledToTheBone) +
+			.02*float64(mage.Talents.ChilledToTheBone) +
 			core.TernaryFloat64(mage.HasMajorGlyph(proto.MageMajorGlyph_GlyphOfFrostfire), .02, 0),
 		CritMultiplier:   mage.SpellCritMultiplier(1, mage.bonusCritDamage+float64(mage.Talents.IceShards)/3),
 		ThreatMultiplier: 1 - 0.1*float64(mage.Talents.BurningSoul) - .04*float64(mage.Talents.FrostChanneling),

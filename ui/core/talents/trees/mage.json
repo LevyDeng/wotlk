@@ -823,6 +823,17 @@
 				"maxPoints": 3
 			},
 			{
+				"fieldName": "wintersCurtain",
+				"location": {
+					"rowIdx": 0,
+					"colIdx": 3
+				},
+				"spellIds": [
+					1284535
+				],
+				"maxPoints": 2
+			},
+			{
 				"fieldName": "iceShards",
 				"location": {
 					"rowIdx": 1,
@@ -1061,6 +1072,32 @@
 				"maxPoints": 5
 			},
 			{
+				"fieldName": "coldFront",
+				"location": {
+					"rowIdx": 6,
+					"colIdx": 3
+				},
+				"spellIds": [
+					1284510
+				],
+				"maxPoints": 5
+			},
+			{
+				"fieldName": "iceLanceMaster",
+				"location": {
+					"rowIdx": 7,
+					"colIdx": 0
+				},
+				"spellIds": [
+					1284602
+				],
+				"maxPoints": 1,
+				"prereqLocation": {
+					"rowIdx": 7,
+					"colIdx": 1
+				}
+			},
+			{
 				"fieldName": "empoweredFrostbolt",
 				"location": {
 					"rowIdx": 7,
@@ -1092,10 +1129,9 @@
 				},
 				"spellIds": [
 					44546,
-					44548,
-					44549
+					44548
 				],
-				"maxPoints": 3
+				"maxPoints": 2
 			},
 			{
 				"fieldName": "summonWaterElemental",
@@ -1115,14 +1151,27 @@
 					"colIdx": 2
 				},
 				"spellIds": [
-					44557,
-					44560,
-					44561
+					44557
 				],
-				"maxPoints": 3,
+				"maxPoints": 1,
 				"prereqLocation": {
 					"rowIdx": 8,
 					"colIdx": 1
+				}
+			},
+			{
+				"fieldName": "frozenOrb",
+				"location": {
+					"rowIdx": 8,
+					"colIdx": 3
+				},
+				"spellIds": [
+					1284427
+				],
+				"maxPoints": 1,
+				"prereqLocation": {
+					"rowIdx": 6,
+					"colIdx": 3
 				}
 			},
 			{

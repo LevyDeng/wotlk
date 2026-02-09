@@ -20,7 +20,7 @@ services:
       - WATCH=0
     # Build frontend (dist/wotlk) and server binary, then run server on :3333
     command: ["sh", "-c", "npm install && make binary_dist && make devserver && exec ./wowsimwotlk --usefs=true --launch=false --host=:3333"]
-    restart: unless-stopped
+    restart: "no"  # 不随系统开机自启
     networks:
       - wowsims-network
 

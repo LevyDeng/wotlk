@@ -68,35 +68,39 @@ message MageTalents {
 	int32 burnout = 57;
 	bool living_bomb = 58;
 
-	// Frost
+	// Frost (field order 59-90 = mage.json frost tree by rowIdx, colIdx)
 	int32 frostbite = 59;
 	int32 improved_frostbolt = 60;
 	int32 ice_floes = 61;
-	int32 ice_shards = 62;
-	int32 frost_warding = 63;
-	int32 precision = 64;
-	int32 permafrost = 65;
-	int32 piercing_ice = 66;
-	bool icy_veins = 67;
-	int32 improved_blizzard = 68;
-	int32 arctic_reach = 69;
-	int32 frost_channeling = 70;
-	int32 shatter = 71;
-	bool cold_snap = 72;
-	int32 improved_cone_of_cold = 73;
-	int32 frozen_core = 74;
-	int32 cold_as_ice = 75;
-	int32 winters_chill = 76;
-	int32 shattered_barrier = 77;
-	bool ice_barrier = 78;
-	int32 arctic_winds = 79;
-	int32 empowered_frostbolt = 80;
-	int32 fingers_of_frost = 81;
-	int32 brain_freeze = 82;
-	bool summon_water_elemental = 83;
-	int32 enduring_winter = 84;
-	int32 chilled_to_the_bone = 85;
-	bool deep_freeze = 86;
+	int32 winters_curtain = 62;  // 寒冬之幕
+	int32 ice_shards = 63;
+	int32 frost_warding = 64;
+	int32 precision = 65;
+	int32 permafrost = 66;
+	int32 piercing_ice = 67;
+	bool icy_veins = 68;
+	int32 improved_blizzard = 69;
+	int32 arctic_reach = 70;
+	int32 frost_channeling = 71;
+	int32 shatter = 72;
+	bool cold_snap = 73;
+	int32 improved_cone_of_cold = 74;
+	int32 frozen_core = 75;
+	int32 cold_as_ice = 76;
+	int32 winters_chill = 77;
+	int32 shattered_barrier = 78;
+	bool ice_barrier = 79;
+	int32 arctic_winds = 80;
+	int32 cold_front = 81;       // 冷锋
+	bool ice_lance_master = 82;  // 长枪法师
+	int32 empowered_frostbolt = 83;
+	int32 fingers_of_frost = 84;
+	int32 brain_freeze = 85;
+	bool summon_water_elemental = 86;
+	int32 enduring_winter = 87;
+	int32 frozen_orb = 88;      // 寒冰宝珠
+	int32 chilled_to_the_bone = 89;
+	bool deep_freeze = 90;
 }
 
 enum MageMajorGlyph {
@@ -157,13 +161,13 @@ message Mage {
 			Scorch = 2;
 		}
 		PrimaryFireSpell primary_fire_spell = 3;
-		
+
 		bool maintain_improved_scorch = 4;
 
 		// Frost Options.
 		bool use_ice_lance = 18;
 	}
-	
+
 	message Options {
 		enum ArmorType {
 			NoArmor = 0;

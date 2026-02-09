@@ -170,9 +170,8 @@ func (db *WowDatabase) AddSpellIcon(id int32, tooltips map[int32]WowheadItemResp
 			return
 		}
 		db.SpellIcons[id] = &proto.IconData{Id: id, Name: tooltip.GetName(), Icon: tooltip.GetIcon()}
-	} else {
-		panic(fmt.Sprintf("No spell tooltip with id %d", id))
 	}
+	// Skip custom/private spell IDs that have no fetched tooltip instead of panicking
 }
 
 type idKeyed interface {
