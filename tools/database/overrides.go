@@ -712,6 +712,60 @@ var ItemOverrides = []*proto.UIItem{
 		},
 		SocketBonus: stats.Stats{stats.SpellPower: 9}.ToFloatArray(),
 	},
+
+	// 提瑞斯法长袍 (30196, cloth chest, 提瑞斯法 set, Phase 2)
+	{
+		Id:             30196,
+		Name:           "提瑞斯法长袍",
+		Type:           proto.ItemType_ItemTypeChest,
+		ArmorType:      proto.ArmorType_ArmorTypeCloth,
+		Ilvl:           219,
+		Quality:        proto.ItemQuality_ItemQualityEpic,
+		Phase:          2,
+		SetName:        "提瑞斯法",
+		ClassAllowlist: []proto.Class{proto.Class_ClassMage, proto.Class_ClassPriest, proto.Class_ClassWarlock},
+		Stats: stats.Stats{
+			stats.Stamina:    92,
+			stats.Intellect:  85,
+			stats.Spirit:     46,
+			stats.SpellPower: 116,
+			stats.MeleeCrit:  54,
+			stats.SpellCrit:  54, // WotLK crit rating is unified
+			stats.Armor:      311,
+		}.ToFloatArray(),
+		GemSockets: []proto.GemColor{
+			proto.GemColor_GemColorRed,
+			proto.GemColor_GemColorYellow,
+		},
+		SocketBonus: stats.Stats{stats.Intellect: 6}.ToFloatArray(),
+	},
+
+	// 提瑞斯法护腿 (30207, cloth legs, 提瑞斯法 set, Phase 2)
+	{
+		Id:             30207,
+		Name:           "提瑞斯法护腿",
+		Type:           proto.ItemType_ItemTypeLegs,
+		ArmorType:      proto.ArmorType_ArmorTypeCloth,
+		Ilvl:           219,
+		Quality:        proto.ItemQuality_ItemQualityEpic,
+		Phase:          2,
+		SetName:        "提瑞斯法",
+		ClassAllowlist: []proto.Class{proto.Class_ClassMage, proto.Class_ClassPriest, proto.Class_ClassWarlock},
+		Stats: stats.Stats{
+			stats.Stamina:    94,
+			stats.Intellect:  80,
+			stats.Spirit:     39,
+			stats.SpellPower: 135,
+			stats.MeleeCrit:  45,
+			stats.SpellCrit:  45, // WotLK crit rating is unified
+			stats.Armor:      272,
+		}.ToFloatArray(),
+		GemSockets: []proto.GemColor{
+			proto.GemColor_GemColorYellow,
+			proto.GemColor_GemColorBlue,
+		},
+		SocketBonus: stats.Stats{stats.Intellect: 6}.ToFloatArray(),
+	},
 }
 
 // Keep these sorted by item ID.
@@ -753,6 +807,8 @@ var ItemAllowList = map[int32]struct{}{
 	29302:  {}, // 永恒之戒 caster (custom override)
 	29950:  {}, // 血警卫的护胫 (custom override)
 	30008:  {}, // 流失岁月坠饰 (custom override)
+	30196:  {}, // 提瑞斯法长袍 (custom override)
+	30207:  {}, // 提瑞斯法护腿 (custom override)
 	30210:  {}, // 提瑞斯法护肩 (custom override)
 	30729:  {}, // 暗铁作战披风 (custom override)
 	28572:  {}, // Blade of the Unrequited
